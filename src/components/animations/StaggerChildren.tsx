@@ -4,10 +4,11 @@ import { useRef, ReactNode } from "react";
 interface Props {
   children: ReactNode;
   className?: string;
+  itemClassName?: string;
   staggerDelay?: number;
 }
 
-const StaggerChildren = ({ children, className, staggerDelay = 0.1 }: Props) => {
+const StaggerChildren = ({ children, className, itemClassName, staggerDelay = 0.1 }: Props) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
@@ -42,11 +43,11 @@ const StaggerChildren = ({ children, className, staggerDelay = 0.1 }: Props) => 
     >
       {Array.isArray(children) 
         ? children.map((child, index) => (
-            <motion.div key={index} variants={item}>
+            <motion.div key={index} variants={item} className={itemClassName}>
               {child}
             </motion.div>
           ))
-        : <motion.div variants={item}>{children}</motion.div>
+        : <motion.div variants={item} className={itemClassName}>{children}</motion.div>
       }
     </motion.div>
   );

@@ -35,51 +35,82 @@ const OurStory = () => {
         <StaggerChildren className="space-y-6 text-ink/90 text-base md:text-lg leading-relaxed" staggerDelay={0.15}>
           <p>
             Somewhere between Berlin and Barcelona,<br />
-            a new definition of beauty began to emerge.
+            a quieter vision of beauty began to take shape.
           </p>
           <p>
-            One that rejects excess, yet commands attention.<br />
-            One that whispers, instead of shouting.
-          </p>
-          <p>But where does a brand like this begin?</p>
-          <p className="italic">
-            "Was there a moment you knew this would become more than just a beauty concept?"
+            Not louder.<br />
+            Not more excessive.<br />
+            Just more intentional.
           </p>
           <p>
-            There is a pause.<br />
-            Not hesitation, intention.
+            The kind of beauty that doesn't compete for attention, yet somehow keeps it.
           </p>
           <p>
-            It was never about creating something new.<br />
-            It was about refining what already existed.<br />
-            Stripping beauty down to its essence and rebuilding it with purpose.
-          </p>
-          <p>
-            At Queenlashes Barcelona, lashes are not applied.<br />
-            They are composed.
-          </p>
-          <p>
-            Every detail is considered. Every movement deliberate. The result is not transformation, but alignment, a version of beauty that feels innate, almost untouched.
+            But brands like this are rarely born from trends.<br />
+            They emerge from instinct.
           </p>
           <p className="italic">
-            "Your work feels incredibly minimal, yet deeply expressive. How do you define luxury?"
+            "Was there a moment you realized this would become more than a beauty concept?"
+          </p>
+          <p>
+            A pause follows.<br />
+            Not out of hesitation, but precision.
+          </p>
+          <p>
+            Because Queenlashes Barcelona was never created to reinvent beauty.<br />
+            It was created to refine it.
+          </p>
+          <p>
+            To strip away the unnecessary.<br />
+            To return to softness, balance, and detail.<br />
+            To make beauty feel less performed and more inherent.
+          </p>
+          <p>
+            At Queenlashes Barcelona, lashes are not simply applied.<br />
+            They are curated with the same intention one might approach fashion, architecture, or photography.
+          </p>
+          <p>
+            Every movement is deliberate.<br />
+            Every detail considered.
+          </p>
+          <p>
+            The result is never dramatic transformation, but something far more compelling:<br />
+            alignment.
+          </p>
+          <p>
+            A version of beauty that feels instinctive. Effortless. Almost untouched.
+          </p>
+          <p className="italic">
+            "Your work feels minimal, yet deeply expressive. What does luxury mean to you?"
           </p>
           <p>
             Luxury is not volume.<br />
-            It is not drama.
+            It is not excess.
           </p>
           <p>
-            It lives in the invisible details in balance, in softness, in the quiet confidence of something done exceptionally well.
+            Luxury lives in restraint.<br />
+            In softness.<br />
+            In the invisible details that most people feel before they ever notice.
           </p>
           <p>
-            And perhaps that is where the brand finds its identity:<br />
-            in the space between technique and intuition.
+            It is the quiet confidence of something executed exceptionally well.
           </p>
           <p>
-            Queenlashes Barcelona was never created to follow trends. It exists to set a tone, one that feels timeless, effortless, and undeniably personal.
+            And perhaps that is where the identity of the brand truly exists:<br />
+            somewhere between technique and intuition, between modern minimalism and feminine expression.
           </p>
           <p>
-            Because in the end, beauty is not about becoming someone else. It's about returning to yourself.
+            Queenlashes Barcelona was never designed to follow beauty culture.<br />
+            It was created to set a tone.
+          </p>
+          <p>
+            Timeless.<br />
+            Personal.<br />
+            Understated in the most intentional way.
+          </p>
+          <p>
+            Because the most powerful kind of beauty never asks you to become someone else.<br />
+            Only to return to yourself.
           </p>
         </StaggerChildren>
 

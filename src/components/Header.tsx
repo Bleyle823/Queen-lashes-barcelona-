@@ -19,10 +19,10 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex items-center justify-between h-20">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3">
-          <img src={logo} alt="Queenlashes Barcelona logo" className="w-16 h-16 object-contain sm:w-[4.5rem] sm:h-[4.5rem]" />
-          <div className="leading-tight hidden sm:block">
-            <div className="font-display text-base tracking-widest text-ink">QUEENLASHES</div>
-            <div className="font-display text-xs tracking-[0.3em] text-ink/70">BARCELONA</div>
+          <img src={logo} alt="Queenlashes Barcelona logo" className="w-[4.6rem] h-[4.6rem] object-contain sm:w-[5.175rem] sm:h-[5.175rem]" />
+          <div className="hidden sm:block whitespace-nowrap font-display text-base tracking-widest leading-tight">
+            <span className="text-ink">QUEENLASHES</span>{" "}
+            <span className="text-ink/70">BARCELONA</span>
           </div>
         </Link>
 
