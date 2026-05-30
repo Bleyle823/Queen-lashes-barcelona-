@@ -2,9 +2,8 @@ import koreanLashLiftImg from "@/assets/korean-lash-lift.png";
 import signatureLashesListingImg from "@/assets/signature-lashes-listing.jpg";
 import browLiftImg from "@/assets/brow-lift.png";
 import signatureBrowsListingImg from "@/assets/signature-brows-listing.jpg";
-import signatureLashExtensionsImg from "@/assets/signature-lash-extensions.png";
-import signatureLashExtensionsListingImg from "@/assets/signature-lash-extensions-listing.png";
 import signatureLashExtensionsDetailImg from "@/assets/signature-lash-extensions-detail.png";
+import signatureLashExtensionsListingImg from "@/assets/signature-lash-extensions-listing.png";
 import bookingSignatureLashExtensionsImg from "@/assets/booking/signature-lash-extensions.png";
 import bookingBrowLiftImg from "@/assets/booking/brow-lift.jpg";
 import bookingKoreanLashLiftImg from "@/assets/booking/korean-lash-lift.jpg";
@@ -82,7 +81,7 @@ export const treatments: Treatment[] = [
       "Lash extensions softly enhance your natural beauty, creating a delicate, fuller look that feels as light as it looks. No mascara, no routine, just quiet confidence from morning to night.",
       "A subtle touch that makes all the difference.",
     ],
-    image: signatureLashExtensionsImg,
+    image: signatureLashExtensionsDetailImg,
     listingsImage: signatureLashExtensionsListingImg,
     detailImage: signatureLashExtensionsDetailImg,
     bookingImage: bookingSignatureLashExtensionsImg,
