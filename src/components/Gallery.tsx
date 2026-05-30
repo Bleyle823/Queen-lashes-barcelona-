@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import FadeInWhenVisible from "@/components/animations/FadeInWhenVisible";
+import galleryImage from "@/assets/gallery-v1.png";
 
 const Gallery = () => {
   return (
@@ -7,7 +8,7 @@ const Gallery = () => {
       <FadeInWhenVisible>
         <div className="relative w-full overflow-hidden">
           <motion.img
-            src="/v1.png"
+            src={galleryImage}
             alt="Queenlashes Barcelona lash and brow portfolio collage"
             className="w-full h-auto object-cover"
             loading="lazy"
