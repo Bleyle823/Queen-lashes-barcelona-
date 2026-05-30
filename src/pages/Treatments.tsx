@@ -18,7 +18,7 @@ const Treatments = () => {
         </section>
         <section className="max-w-7xl mx-auto px-6 lg:px-10">
           {treatments.map((t, i) => (
-            <TreatmentBlock key={t.slug} treatment={t} reverse={i % 2 === 1} />
+            <TreatmentBlock key={t.slug} treatment={t} reverse={i % 2 === 1} useListingsImage />
           ))}
         </section>
       </main>

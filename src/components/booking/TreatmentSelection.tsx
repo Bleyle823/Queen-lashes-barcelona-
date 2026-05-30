@@ -36,7 +36,7 @@ const TreatmentSelection = ({
           >
             <div className="flex items-start gap-4">
               <img
-                src={treatment.image}
+                src={treatment.bookingImage ?? treatment.image}
                 alt={treatment.name}
                 className="w-20 h-20 object-cover flex-shrink-0"
               />

@@ -7,24 +7,30 @@ import type { Treatment } from "@/data/treatments";
 interface Props {
   treatment: Treatment;
   reverse?: boolean;
+  useListingsImage?: boolean;
 }
 
-const TreatmentBlock = ({ treatment, reverse }: Props) => {
+const TreatmentBlock = ({ treatment, reverse, useListingsImage }: Props) => {
+  const imageSrc =
+    useListingsImage && treatment.listingsImage
+      ? treatment.listingsImage
+      : treatment.image;
+
   return (
     <FadeInWhenVisible>
-      <article className={`grid md:grid-cols-2 gap-10 lg:gap-16 items-center py-12 ${reverse ? "md:[&>*:first-child]:order-2" : ""}`}>
+      <article className={`grid md:grid-cols-2 gap-10 lg:gap-16 items-start md:items-center py-12 ${reverse ? "md:[&>*:first-child]:order-2" : ""}`}>
         <motion.div
           whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
           <img
-            src={treatment.image}
+            src={imageSrc}
             alt={treatment.name}
             className="w-full aspect-square object-cover"
           />
         </motion.div>
         
-        <div className="space-y-5 -translate-y-[15%]">
+        <div className="space-y-5 mt-8 md:mt-0">
           <motion.h2 
             className="font-display text-3xl md:text-4xl text-ink"
             initial={{ opacity: 0, x: reverse ? 50 : -50 }}

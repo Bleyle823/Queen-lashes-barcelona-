@@ -31,7 +31,7 @@ const TreatmentDetail = () => {
         <FadeInWhenVisible>
           <div className="mt-8 grid md:grid-cols-2 gap-12 items-start">
             <motion.img 
-              src={treatment.image} 
+              src={treatment.detailImage ?? treatment.image} 
               alt={treatment.name} 
               className="w-full aspect-square object-cover"
               whileHover={{ scale: 1.02 }}

@@ -1,6 +1,13 @@
-import koreanLashLiftImg from "@/assets/korean-lash-lift.jpg";
-import browLiftImg from "@/assets/brow-lift.jpg";
+import koreanLashLiftImg from "@/assets/korean-lash-lift.png";
+import signatureLashesListingImg from "@/assets/signature-lashes-listing.jpg";
+import browLiftImg from "@/assets/brow-lift.png";
+import signatureBrowsListingImg from "@/assets/signature-brows-listing.jpg";
 import signatureLashExtensionsImg from "@/assets/signature-lash-extensions.png";
+import signatureLashExtensionsListingImg from "@/assets/signature-lash-extensions-listing.png";
+import signatureLashExtensionsDetailImg from "@/assets/signature-lash-extensions-detail.png";
+import bookingSignatureLashExtensionsImg from "@/assets/booking/signature-lash-extensions.png";
+import bookingBrowLiftImg from "@/assets/booking/brow-lift.jpg";
+import bookingKoreanLashLiftImg from "@/assets/booking/korean-lash-lift.jpg";
 import exploreKoreanLashLift from "@/assets/explore-korean-lash-lift.png";
 import exploreKeratinLashLift from "@/assets/explore-keratin-lash-lift.png";
 import exploreWispySet from "@/assets/explore-wispy-set.png";
@@ -37,6 +44,12 @@ export interface Treatment {
   tagline: string;
   description: string[];
   image: string;
+  /** Image on /treatments listing; falls back to `image` when omitted. */
+  listingsImage?: string;
+  /** Hero image on the treatment detail page; falls back to `image` when omitted. */
+  detailImage?: string;
+  /** Thumbnail on the booking flow only; falls back to `image` when omitted. */
+  bookingImage?: string;
   cta: string;
   price?: string;
   /** Slot length for calendar booking (lash extensions = 120). */
@@ -70,6 +83,9 @@ export const treatments: Treatment[] = [
       "A subtle touch that makes all the difference.",
     ],
     image: signatureLashExtensionsImg,
+    listingsImage: signatureLashExtensionsListingImg,
+    detailImage: signatureLashExtensionsDetailImg,
+    bookingImage: bookingSignatureLashExtensionsImg,
     cta: "Explore Your Look",
     bookingDurationMinutes: 120,
     exploreLook: signatureLashExtensionsExploreLook,
@@ -93,6 +109,8 @@ export const treatments: Treatment[] = [
       "A subtle transformation, made for you.",
     ],
     image: browLiftImg,
+    listingsImage: signatureBrowsListingImg,
+    bookingImage: bookingBrowLiftImg,
     cta: "Explore Your Look",
     bookingDurationMinutes: 60,
   },
@@ -108,6 +126,8 @@ export const treatments: Treatment[] = [
       "Experience lashes, elevated.",
     ],
     image: koreanLashLiftImg,
+    listingsImage: signatureLashesListingImg,
+    bookingImage: bookingKoreanLashLiftImg,
     cta: "Explore Your Look",
     exploreLook: signatureLashesExploreLook,
     bookingDurationMinutes: 60,
