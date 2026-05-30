@@ -115,7 +115,7 @@ const BookingFlow = () => {
     }
 
     const serviceLabel = selectedVariant
-      ? `${selectedTreatment.name} — ${selectedVariant.label}`
+      ? `${selectedTreatment.name}, ${selectedVariant.label}`
       : undefined;
 
     return {

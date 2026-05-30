@@ -6,7 +6,7 @@
  * booking row + sends the confirmation email when payment succeeds (via the
  * Stripe webhook OR when the success page calls `GET /api/checkout-session-status`).
  *
- * Therefore there is no client-side `createBooking` anymore — see
+ * Therefore there is no client-side `createBooking` anymore; see
  * `src/lib/stripe-checkout.ts` and `server/index.mjs`.
  */
 

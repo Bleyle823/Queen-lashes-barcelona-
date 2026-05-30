@@ -327,16 +327,16 @@ const BookingDetailDrawer = ({
     ["Slot", `${booking.slot_date} ${String(booking.slot_start).slice(0, 5)}–${String(booking.slot_end).slice(0, 5)}`],
     ["Customer", `${booking.first_name} ${booking.last_name}`],
     ["Email", booking.email],
-    ["Phone", booking.phone || "—"],
-    ["Notes", booking.notes || "—"],
+    ["Phone", booking.phone || "-"],
+    ["Notes", booking.notes || "-"],
     ["Deposit paid (online)", formatEur(booking.total_amount_cents)],
     ...(typeof booking.service_price_cents === "number" && Number.isFinite(booking.service_price_cents)
       ? ([
           ["Service total (menu)", formatEur(booking.service_price_cents)],
-          ["Balance due at visit", balanceAtVisit != null ? formatEur(balanceAtVisit) : "—"],
+          ["Balance due at visit", balanceAtVisit != null ? formatEur(balanceAtVisit) : "-"],
         ] as [string, React.ReactNode][])
       : []),
-    ["Stripe session", booking.stripe_session_id ? <code className="text-xs" key="ss">{booking.stripe_session_id}</code> : "—"],
+    ["Stripe session", booking.stripe_session_id ? <code className="text-xs" key="ss">{booking.stripe_session_id}</code> : "-"],
     [
       "Receipt",
       booking.receipt_url ? (
@@ -344,7 +344,7 @@ const BookingDetailDrawer = ({
           Open Stripe receipt
         </a>
       ) : (
-        "—"
+        "-"
       ),
     ],
     ["Email sent at", booking.email_sent_at || "Not sent"],

@@ -17,7 +17,7 @@ const Booking = () => {
     setTimeout(() => {
       setSubmitting(false);
       (e.target as HTMLFormElement).reset();
-      toast.success("Booking request sent — we'll be in touch soon.");
+      toast.success("Booking request sent. We'll be in touch soon.");
     }, 600);
   };
 

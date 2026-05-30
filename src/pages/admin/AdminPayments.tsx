@@ -111,7 +111,7 @@ const AdminPayments = () => {
                   </td>
                   <td className="px-3 py-2 text-ink/80">{b.treatment_name}</td>
                   <td className="px-3 py-2 text-ink/60 text-xs font-mono">
-                    {b.stripe_payment_intent_id || "—"}
+                    {b.stripe_payment_intent_id || "-"}
                   </td>
                   <td className="px-3 py-2 text-right text-ink whitespace-nowrap">
                     {formatEur(b.total_amount_cents)}

@@ -102,7 +102,7 @@ const BookingConfirmation = ({
             </a>
           ) : (
             <p className="text-xs text-ink/60">
-              If a hosted receipt link is not shown yet, check your inbox—Stripe sends a receipt to the email you used at
+              If a hosted receipt link is not shown yet, check your inbox. Stripe sends a receipt to the email you used at
               checkout when receipts are enabled in your Stripe Dashboard.
             </p>
           )}

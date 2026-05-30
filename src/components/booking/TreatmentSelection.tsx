@@ -44,7 +44,7 @@ const TreatmentSelection = ({
                 <h3 className="font-display text-lg text-ink">{treatment.name}</h3>
                 <p className="text-ink/80 mt-1 font-script text-lg">{treatment.tagline}</p>
                 {treatment.price && !treatment.bookingVariants?.length && (
-                  <p className="text-ink font-medium mt-2">{treatment.price}</p>
+                  <p className="font-display text-sm text-ink mt-2">{treatment.price}</p>
                 )}
                 {treatment.bookingVariants?.length ? (
                   <p className="text-ink/60 text-xs mt-2">Choose a specific style in the next step.</p>

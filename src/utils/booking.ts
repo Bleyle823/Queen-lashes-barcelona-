@@ -134,6 +134,6 @@ export function formatAppointmentDuration(minutes: number): string {
 
 export function getBookingServiceLabel(data: Pick<BookingData, "treatment" | "selectedVariant" | "serviceLabel">): string {
   if (data.serviceLabel) return data.serviceLabel;
-  if (data.selectedVariant) return `${data.treatment.name} — ${data.selectedVariant.label}`;
+  if (data.selectedVariant) return `${data.treatment.name}, ${data.selectedVariant.label}`;
   return data.treatment.name;
 }

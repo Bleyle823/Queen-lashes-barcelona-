@@ -38,7 +38,7 @@ const BookingSummary = ({ bookingData }: Props) => {
           <div className="text-right space-y-1">
             <p className="text-xs text-ink/60 uppercase tracking-wide">Service total</p>
             <p className="font-display text-lg text-ink">
-              {servicePriceCents != null ? formatPrice(servicePriceCents) : "—"}
+              {servicePriceCents != null ? formatPrice(servicePriceCents) : "-"}
             </p>
           </div>
         </div>

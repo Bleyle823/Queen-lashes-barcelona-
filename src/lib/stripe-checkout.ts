@@ -32,7 +32,7 @@ export function bookingToCheckoutPayload(booking: BookingData) {
   const treatmentPrice = priceFromVariant ?? booking.treatment.price ?? "";
 
   const displayName = booking.selectedVariant
-    ? `${booking.treatment.name} — ${booking.selectedVariant.label}`
+    ? `${booking.treatment.name}, ${booking.selectedVariant.label}`
     : booking.treatment.name;
 
   return {

@@ -1,5 +1,5 @@
-import koreanLashLiftImg from "@/assets/korean-lash-lift.png";
-import browLiftImg from "@/assets/brow-lift.png";
+import koreanLashLiftImg from "@/assets/korean-lash-lift.jpg";
+import browLiftImg from "@/assets/brow-lift.jpg";
 import signatureLashExtensionsImg from "@/assets/signature-lash-extensions.png";
 import exploreKoreanLashLift from "@/assets/explore-korean-lash-lift.png";
 import exploreKeratinLashLift from "@/assets/explore-keratin-lash-lift.png";
@@ -48,14 +48,14 @@ export interface Treatment {
 }
 
 const signatureLashExtensionsExploreLook: ExploreLookItem[] = [
-  { image: exploreWispySet, alt: "Wispy Set lash extensions — Queenlashes Barcelona" },
-  { image: exploreLightVolume, alt: "Light Volume lash extensions — Queenlashes Barcelona" },
-  { image: exploreMangaAnime, alt: "Manga x Anime lash style — Queenlashes Barcelona" },
+  { image: exploreWispySet, alt: "Wispy Set lash extensions, Queenlashes Barcelona" },
+  { image: exploreLightVolume, alt: "Light Volume lash extensions, Queenlashes Barcelona" },
+  { image: exploreMangaAnime, alt: "Manga x Anime lash style, Queenlashes Barcelona" },
 ];
 
 const signatureLashesExploreLook: ExploreLookItem[] = [
-  { image: exploreKoreanLashLift, alt: "Korean Lash Lift — Queenlashes Barcelona" },
-  { image: exploreKeratinLashLift, alt: "Keratin Lash Lift — Queenlashes Barcelona" },
+  { image: exploreKoreanLashLift, alt: "Korean Lash Lift, Queenlashes Barcelona" },
+  { image: exploreKeratinLashLift, alt: "Keratin Lash Lift, Queenlashes Barcelona" },
 ];
 
 export const treatments: Treatment[] = [
@@ -74,6 +74,7 @@ export const treatments: Treatment[] = [
     bookingDurationMinutes: 120,
     exploreLook: signatureLashExtensionsExploreLook,
     bookingVariants: [
+      { id: "classic-1-1", label: "Classic 1:1", price: "100€" },
       { id: "wispy-set", label: "Wispy Set", price: "115€" },
       { id: "light-volume", label: "Light Volume (5D)", price: "115€" },
       { id: "manga-anime", label: "Manga x Anime", price: "110€" },
@@ -86,7 +87,7 @@ export const treatments: Treatment[] = [
     tagline: "A subtle transformation, made for you.",
     price: "Brow Lift 55€",
     description: [
-      "There's a quiet confidence in beautifully styled brows—soft, lifted, and naturally full.",
+      "There's a quiet confidence in beautifully styled brows, soft, lifted, and naturally full.",
       "Our Signature Brow Lift enhances what's already yours, creating a smooth, brushed-up finish that feels light, effortless, and perfectly tailored to you.",
       "No daily styling, no harsh lines just naturally elevated beauty.",
       "A subtle transformation, made for you.",
@@ -158,7 +159,7 @@ export const priceGroups: PriceGroup[] = [
   },
 ];
 
-/** Homepage + Korean lash detail — lift & tint menu */
+/** Homepage + Korean lash detail: lift & tint menu */
 export const lashLiftPriceGroups: PriceGroup[] = [
   {
     name: "Lash lift & tint",

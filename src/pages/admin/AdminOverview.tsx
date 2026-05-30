@@ -91,7 +91,7 @@ const AdminOverview = () => {
                       {b.first_name} {b.last_name}
                     </p>
                     <p className="text-ink/60 text-xs">
-                      {b.treatment_name} — {b.slot_date} {String(b.slot_start).slice(0, 5)}
+                      {b.treatment_name}, {b.slot_date} {String(b.slot_start).slice(0, 5)}
                     </p>
                   </div>
                   <span className="text-ink/70 text-xs">{formatEur(b.total_amount_cents)}</span>

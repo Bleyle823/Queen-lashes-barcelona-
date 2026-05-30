@@ -112,7 +112,7 @@ const BookingSuccess = () => {
         const session = await fetchCheckoutSessionStatus(sessionId);
         if (session.booking?.receipt_url) setReceiptUrl(session.booking.receipt_url);
       } catch {
-        /* ignore — user already sees confirmation */
+        /* ignore: user already sees confirmation */
       }
     }, 2200);
     return () => clearTimeout(t);

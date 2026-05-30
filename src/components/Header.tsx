@@ -19,7 +19,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex items-center justify-between h-20">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3">
-          <img src={logo} alt="Queenlashes Barcelona logo" className="w-[4.6rem] h-[4.6rem] object-contain sm:w-[5.175rem] sm:h-[5.175rem]" />
+          <img src={logo} alt="Queenlashes Barcelona logo" className="w-[5.738rem] h-[5.738rem] object-contain sm:w-[6.455rem] sm:h-[6.455rem]" />
           <div className="hidden sm:block whitespace-nowrap font-display text-base tracking-widest leading-tight">
             <span className="text-ink">QUEENLASHES</span>{" "}
             <span className="text-ink/70">BARCELONA</span>

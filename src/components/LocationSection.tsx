@@ -26,7 +26,7 @@ const LocationSection = () => {
           </div>
           <div className="relative w-[60%] max-w-full aspect-square min-h-0 mx-auto lg:ml-auto lg:mr-0 -translate-y-[15%]">
             <iframe
-              title="Map — near La Sagrada Família, Barcelona"
+              title="Map near La Sagrada Família, Barcelona"
               src={SAGRADA_FAMILIA_EMBED_SRC}
               className="absolute inset-0 h-full w-full border-0"
               loading="lazy"
