@@ -3,6 +3,8 @@ import { CreditCard, Lock, ExternalLink } from "lucide-react";
 import type { BookingData } from "@/types/booking";
 import { formatPrice } from "@/utils/booking";
 import { createHostedCheckoutSession } from "@/lib/stripe-checkout";
+import { useTranslation } from "@/i18n/LocaleProvider";
+import { interpolate } from "@/i18n/translations";
 
 interface Props {
   bookingData: BookingData;
@@ -11,6 +13,7 @@ interface Props {
 const PaymentForm = ({ bookingData }: Props) => {
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const { depositAmountCents, servicePriceCents } = bookingData;
   const balanceDue =
@@ -22,8 +25,8 @@ const PaymentForm = ({ bookingData }: Props) => {
     try {
       const url = await createHostedCheckoutSession(bookingData);
       window.location.assign(url);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not start checkout");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t.booking.payment.checkoutError);
       setIsRedirecting(false);
     }
   };
@@ -31,35 +34,32 @@ const PaymentForm = ({ bookingData }: Props) => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-display text-2xl text-ink mb-2">Payment</h2>
-        <p className="text-ink/70 text-sm">
-          Pay your booking deposit on Stripe&apos;s secure page. The rest is due at the salon after your treatment.
-        </p>
+        <h2 className="font-display text-2xl text-ink mb-2">{t.booking.payment.title}</h2>
+        <p className="text-ink/70 text-sm">{t.booking.payment.subtitle}</p>
       </div>
 
       <div className="bg-muted border p-4 space-y-3">
         {servicePriceCents != null ? (
           <div className="flex justify-between items-center text-sm border-b border-border pb-3">
-            <span className="text-ink/80">Service total</span>
+            <span className="text-ink/80">{t.booking.payment.serviceTotal}</span>
             <span className="font-display text-ink">{formatPrice(servicePriceCents)}</span>
           </div>
         ) : null}
         <div className="flex justify-between items-center">
-          <span className="text-ink/80">Deposit due now</span>
+          <span className="text-ink/80">{t.booking.payment.depositDue}</span>
           <span className="font-display text-xl text-ink">{formatPrice(depositAmountCents)}</span>
         </div>
         {balanceDue != null && servicePriceCents != null ? (
           <p className="text-xs text-ink/65 pt-1">
-            Balance due at visit after your service: <strong className="text-ink">{formatPrice(balanceDue)}</strong>
+            {t.booking.payment.balanceAtVisit}{" "}
+            <strong className="text-ink">{formatPrice(balanceDue)}</strong>
           </p>
         ) : null}
       </div>
 
       <div className="flex items-start gap-2 text-xs text-ink/60 bg-accent/10 p-3 border border-accent/20">
         <Lock className="w-4 h-4 flex-shrink-0 mt-0.5" />
-        <p>
-          Card details are entered only on Stripe. We never see your full card number on this site.
-        </p>
+        <p>{t.booking.payment.secureNote}</p>
       </div>
 
       {error && (
@@ -77,12 +77,12 @@ const PaymentForm = ({ bookingData }: Props) => {
         {isRedirecting ? (
           <>
             <div className="w-4 h-4 border-2 border-ink/30 border-t-ink rounded-full animate-spin" />
-            Redirecting…
+            {t.booking.payment.redirecting}
           </>
         ) : (
           <>
             <CreditCard className="w-4 h-4" />
-            Pay {formatPrice(depositAmountCents)} deposit with Stripe
+            {interpolate(t.booking.payment.payDeposit, { amount: formatPrice(depositAmountCents) })}
             <ExternalLink className="w-4 h-4 opacity-70" aria-hidden />
           </>
         )}

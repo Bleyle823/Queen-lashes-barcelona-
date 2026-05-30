@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import koreanLashLiftImg from "@/assets/korean-lash-lift.png";
 import signatureLashesListingImg from "@/assets/signature-lashes-listing.jpg";
 import browLiftImg from "@/assets/brow-lift.png";
@@ -11,6 +12,9 @@ import exploreKeratinLashLift from "@/assets/explore-keratin-lash-lift.png";
 import exploreWispySet from "@/assets/explore-wispy-set.png";
 import exploreLightVolume from "@/assets/explore-light-volume.png";
 import exploreMangaAnime from "@/assets/explore-manga-anime.png";
+import { useTranslation } from "@/i18n/LocaleProvider";
+import { translations } from "@/i18n/translations";
+import type { Locale } from "@/i18n/types";
 
 export interface PriceTier {
   label: string;
@@ -27,11 +31,9 @@ export interface ExploreLookItem {
   alt: string;
 }
 
-/** Bookable sub-style for treatments that share one page slug (e.g. Wispy vs Light Volume). */
 export interface TreatmentVariant {
   id: string;
   label: string;
-  /** Parsed by checkout as the first `NN€` value (e.g. `"115€"` → 11500 cents). */
   price: string;
 }
 
@@ -42,152 +44,194 @@ export interface Treatment {
   tagline: string;
   description: string[];
   image: string;
-  /** Image on /treatments listing; falls back to `image` when omitted. */
   listingsImage?: string;
-  /** Hero image on the treatment detail page; falls back to `image` when omitted. */
   detailImage?: string;
-  /** Thumbnail on the booking flow only; falls back to `image` when omitted. */
   bookingImage?: string;
   cta: string;
   price?: string;
-  /** Slot length for calendar booking (lash extensions = 120). */
   bookingDurationMinutes: number;
-  /** Promo graphics on the detail page (“Explore your look”) */
   exploreLook?: ExploreLookItem[];
-  /** If set, the guest must pick one variant before continuing (prices shown at booking). */
   bookingVariants?: TreatmentVariant[];
 }
 
-const signatureLashExtensionsExploreLook: ExploreLookItem[] = [
-  { image: exploreWispySet, alt: "Wispy Set lash extensions, Queenlashes Barcelona" },
-  { image: exploreLightVolume, alt: "Light Volume lash extensions, Queenlashes Barcelona" },
-  { image: exploreMangaAnime, alt: "Manga x Anime lash style, Queenlashes Barcelona" },
-];
+const VARIANT_PRICES = {
+  "classic-1-1": "100€",
+  "wispy-set": "115€",
+  "light-volume": "115€",
+  "manga-anime": "110€",
+  "korean-style": "70€",
+  "keratin-style": "60€",
+} as const;
 
-const signatureLashesExploreLook: ExploreLookItem[] = [
-  { image: exploreKoreanLashLift, alt: "Korean Lash Lift, Queenlashes Barcelona" },
-  { image: exploreKeratinLashLift, alt: "Keratin Lash Lift, Queenlashes Barcelona" },
-];
+function buildTreatment(slug: keyof typeof translations.en.treatmentContent, locale: Locale): Treatment {
+  const content = translations[locale].treatmentContent[slug];
 
-export const treatments: Treatment[] = [
-  {
-    slug: "signature-lash-extensions",
-    name: "Signature Lash Extensions",
-    scriptName: "Classic 1:1",
-    tagline: "A subtle touch that makes all the difference.",
-    description: [
-      "There's something special about feeling effortlessly put together without trying too hard.",
-      "Lash extensions softly enhance your natural beauty, creating a delicate, fuller look that feels as light as it looks. No mascara, no routine, just quiet confidence from morning to night.",
-      "A subtle touch that makes all the difference.",
-    ],
-    image: signatureLashExtensionsDetailImg,
-    listingsImage: signatureLashExtensionsListingImg,
-    detailImage: signatureLashExtensionsDetailImg,
-    bookingImage: signatureLashExtensionsListingImg,
-    cta: "Explore Your Look",
-    bookingDurationMinutes: 120,
-    exploreLook: signatureLashExtensionsExploreLook,
-    bookingVariants: [
-      { id: "classic-1-1", label: "Classic 1:1", price: "100€" },
-      { id: "wispy-set", label: "Wispy Set", price: "115€" },
-      { id: "light-volume", label: "Light Volume (5D)", price: "115€" },
-      { id: "manga-anime", label: "Manga x Anime", price: "110€" },
-    ],
-  },
-  {
-    slug: "signature-brows",
-    name: "Signature Brows",
-    scriptName: "Brow Lift",
-    tagline: "A subtle transformation, made for you.",
-    price: "Brow Lift 55€",
-    description: [
-      "There's a quiet confidence in beautifully styled brows, soft, lifted, and naturally full.",
-      "Our Signature Brow Lift enhances what's already yours, creating a smooth, brushed-up finish that feels light, effortless, and perfectly tailored to you.",
-      "No daily styling, no harsh lines just naturally elevated beauty.",
-      "A subtle transformation, made for you.",
-    ],
-    image: browLiftImg,
-    listingsImage: signatureBrowsListingImg,
-    bookingImage: bookingBrowLiftImg,
-    cta: "Explore Your Look",
-    bookingDurationMinutes: 60,
-  },
-  {
+  if (slug === "signature-lash-extensions") {
+    const ext = content as (typeof translations.en.treatmentContent)["signature-lash-extensions"];
+    return {
+      slug,
+      name: ext.name,
+      scriptName: "Classic 1:1",
+      tagline: ext.tagline,
+      description: [...ext.description],
+      image: signatureLashExtensionsDetailImg,
+      listingsImage: signatureLashExtensionsListingImg,
+      detailImage: signatureLashExtensionsDetailImg,
+      bookingImage: signatureLashExtensionsListingImg,
+      cta: ext.cta,
+      bookingDurationMinutes: 120,
+      exploreLook: [
+        { image: exploreWispySet, alt: ext.exploreAlts.wispy },
+        { image: exploreLightVolume, alt: ext.exploreAlts.lightVolume },
+        { image: exploreMangaAnime, alt: ext.exploreAlts.manga },
+      ],
+      bookingVariants: [
+        { id: "classic-1-1", label: ext.variants["classic-1-1"], price: VARIANT_PRICES["classic-1-1"] },
+        { id: "wispy-set", label: ext.variants["wispy-set"], price: VARIANT_PRICES["wispy-set"] },
+        { id: "light-volume", label: ext.variants["light-volume"], price: VARIANT_PRICES["light-volume"] },
+        { id: "manga-anime", label: ext.variants["manga-anime"], price: VARIANT_PRICES["manga-anime"] },
+      ],
+    };
+  }
+
+  if (slug === "signature-brows") {
+    const brows = content as (typeof translations.en.treatmentContent)["signature-brows"];
+    return {
+      slug,
+      name: brows.name,
+      scriptName: "Brow Lift",
+      tagline: brows.tagline,
+      price: brows.price,
+      description: [...brows.description],
+      image: browLiftImg,
+      listingsImage: signatureBrowsListingImg,
+      bookingImage: bookingBrowLiftImg,
+      cta: brows.cta,
+      bookingDurationMinutes: 60,
+    };
+  }
+
+  const lashes = content as (typeof translations.en.treatmentContent)["korean-lash-lift"];
+  return {
     slug: "korean-lash-lift",
-    name: "Signature Lashes",
+    name: lashes.name,
     scriptName: "Korean Lash Lift",
-    tagline: "Experience lashes, elevated.",
-    description: [
-      "If your lashes feel straight, lose their shape quickly, or rely on daily mascara to create definition, the result often feels temporary rather than refined.",
-      "Our Signature Lash Lift offers a bespoke approach. Lifting your natural lashes with precision to create a soft, lasting curve that enhances your eyes without excess or effort.",
-      "The result is a polished, weightless look that stays with you, from morning to night.",
-      "Experience lashes, elevated.",
-    ],
+    tagline: lashes.tagline,
+    description: [...lashes.description],
     image: koreanLashLiftImg,
     listingsImage: signatureLashesListingImg,
     bookingImage: bookingKoreanLashLiftImg,
-    cta: "Explore Your Look",
-    exploreLook: signatureLashesExploreLook,
+    cta: lashes.cta,
+    exploreLook: [
+      { image: exploreKoreanLashLift, alt: lashes.exploreAlts.korean },
+      { image: exploreKeratinLashLift, alt: lashes.exploreAlts.keratin },
+    ],
     bookingDurationMinutes: 60,
     bookingVariants: [
-      { id: "korean-style", label: "Korean Lash Lift & Tint", price: "70€" },
-      { id: "keratin-style", label: "Keratin Lash Lift & Tint", price: "60€" },
+      { id: "korean-style", label: lashes.variants["korean-style"], price: VARIANT_PRICES["korean-style"] },
+      { id: "keratin-style", label: lashes.variants["keratin-style"], price: VARIANT_PRICES["keratin-style"] },
     ],
-  },
-];
+  };
+}
 
-export const priceGroups: PriceGroup[] = [
-  {
-    name: "Classic 1:1",
-    tiers: [
-      { label: "New set", price: "100€" },
-      { label: "Refill after 2 weeks", price: "60€" },
-      { label: "Refill after 3 weeks", price: "70€" },
-    ],
-  },
-  {
-    name: "Manga Lashes",
-    tiers: [
-      { label: "New set", price: "110€" },
-      { label: "Refill after 2 weeks", price: "65€" },
-      { label: "Refill after 3 weeks", price: "75€" },
-    ],
-  },
-  {
-    name: "Light Volume 5D",
-    tiers: [
-      { label: "New set", price: "115€" },
-      { label: "Refill after 2 weeks", price: "70€" },
-      { label: "Refill after 3 weeks", price: "80€" },
-    ],
-  },
-  {
-    name: "Wispy Set",
-    tiers: [
-      { label: "New set", price: "115€" },
-      { label: "Refill after 2 weeks", price: "70€" },
-      { label: "Refill after 3 weeks", price: "80€" },
-    ],
-  },
-  {
-    name: "Brow Lift",
-    tiers: [
-      { label: "Brow Lift", price: "55€" },
-    ],
-  },
-];
+const TREATMENT_SLUGS = ["signature-lash-extensions", "signature-brows", "korean-lash-lift"] as const;
 
-/** Homepage + Korean lash detail: lift & tint menu */
-export const lashLiftPriceGroups: PriceGroup[] = [
-  {
-    name: "Lash lift & tint",
-    tiers: [
-      { label: "Korean Lash Lift & Tint", price: "70€" },
-      { label: "Keratin Lash Lift & Tint", price: "60€" },
-    ],
-  },
-];
+export function getTreatments(locale: Locale = "en"): Treatment[] {
+  return TREATMENT_SLUGS.map((slug) => buildTreatment(slug, locale));
+}
 
-export function getTreatment(slug: string): Treatment | undefined {
-  return treatments.find((t) => t.slug === slug);
+export function getTreatment(slug: string, locale: Locale = "en"): Treatment | undefined {
+  if (!TREATMENT_SLUGS.includes(slug as (typeof TREATMENT_SLUGS)[number])) return undefined;
+  return buildTreatment(slug as (typeof TREATMENT_SLUGS)[number], locale);
+}
+
+export function getLashExtensionPriceGroups(locale: Locale = "en"): PriceGroup[] {
+  const p = translations[locale].prices;
+  return [
+    {
+      name: p.groups.classic11,
+      tiers: [
+        { label: p.newSet, price: "100€" },
+        { label: p.refill2w, price: "60€" },
+        { label: p.refill3w, price: "70€" },
+      ],
+    },
+    {
+      name: p.groups.manga,
+      tiers: [
+        { label: p.newSet, price: "110€" },
+        { label: p.refill2w, price: "65€" },
+        { label: p.refill3w, price: "75€" },
+      ],
+    },
+    {
+      name: p.groups.lightVolume,
+      tiers: [
+        { label: p.newSet, price: "115€" },
+        { label: p.refill2w, price: "70€" },
+        { label: p.refill3w, price: "80€" },
+      ],
+    },
+    {
+      name: p.groups.wispy,
+      tiers: [
+        { label: p.newSet, price: "115€" },
+        { label: p.refill2w, price: "70€" },
+        { label: p.refill3w, price: "80€" },
+      ],
+    },
+  ];
+}
+
+export function getPriceGroups(locale: Locale = "en"): PriceGroup[] {
+  const p = translations[locale].prices;
+  return [
+    ...getLashExtensionPriceGroups(locale),
+    {
+      name: p.groups.browLift,
+      tiers: [{ label: p.browLift, price: "55€" }],
+    },
+  ];
+}
+
+export function getLashLiftPriceGroups(locale: Locale = "en"): PriceGroup[] {
+  const p = translations[locale].prices;
+  return [
+    {
+      name: p.lashLiftTint,
+      tiers: [
+        { label: p.variants.koreanLiftTint, price: "70€" },
+        { label: p.variants.keratinLiftTint, price: "60€" },
+      ],
+    },
+  ];
+}
+
+/** @deprecated Use getTreatments(locale) or useTreatments() */
+export const treatments = getTreatments("en");
+/** @deprecated Use getPriceGroups(locale) */
+export const priceGroups = getPriceGroups("en");
+/** @deprecated Use getLashLiftPriceGroups(locale) */
+export const lashLiftPriceGroups = getLashLiftPriceGroups("en");
+
+export function useTreatments() {
+  const { locale } = useTranslation();
+  return useMemo(() => getTreatments(locale), [locale]);
+}
+
+export function useTreatment(slug: string) {
+  const { locale } = useTranslation();
+  return useMemo(() => (slug ? getTreatment(slug, locale) : undefined), [slug, locale]);
+}
+
+export function usePriceGroups() {
+  const { locale } = useTranslation();
+  return useMemo(
+    () => ({
+      priceGroups: getPriceGroups(locale),
+      lashExtensionPriceGroups: getLashExtensionPriceGroups(locale),
+      lashLiftPriceGroups: getLashLiftPriceGroups(locale),
+    }),
+    [locale],
+  );
 }

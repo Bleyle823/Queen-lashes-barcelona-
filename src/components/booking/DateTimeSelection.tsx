@@ -1,8 +1,10 @@
 import { useState, useMemo } from "react";
 import { format, isToday, isTomorrow } from "date-fns";
+import { enUS, es as esLocale } from "date-fns/locale";
 import { Clock } from "lucide-react";
 import type { BookingSlot } from "@/types/booking";
 import { generateTimeSlots, getAvailableDates } from "@/utils/booking";
+import { useTranslation } from "@/i18n/LocaleProvider";
 
 type AvailabilityEntry = {
   date: string;
@@ -14,12 +16,9 @@ type AvailabilityEntry = {
 interface Props {
   selectedSlot: BookingSlot | null;
   onSelect: (slot: BookingSlot) => void;
-  /** Appointment length in minutes (60 or 120 for extensions). */
   durationMinutes?: number;
   existingBookings?: BookingSlot[];
-  /** Admin-blocked dates / slots. */
   blocked?: AvailabilityEntry[];
-  /** Admin-added extra slots. */
   extra?: AvailabilityEntry[];
 }
 
@@ -32,6 +31,8 @@ const DateTimeSelection = ({
   extra = [],
 }: Props) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const { t, locale } = useTranslation();
+  const dateLocale = locale === "es" ? esLocale : enUS;
   const availableDates = useMemo(() => getAvailableDates(), []);
 
   const blockedWholeDays = useMemo(
@@ -74,13 +75,17 @@ const DateTimeSelection = ({
   }, [selectedDate, existingBookings, extra, blockedSlotKeys, blockedWholeDays, durationMinutes]);
 
   const formatDateDisplay = (date: Date): string => {
-    if (isToday(date)) return `Today, ${format(date, "MMM d")}`;
-    if (isTomorrow(date)) return `Tomorrow, ${format(date, "MMM d")}`;
-    return format(date, "EEE, MMM d");
+    const datePart = format(date, locale === "es" ? "d MMM" : "MMM d", { locale: dateLocale });
+    if (isToday(date)) return `${t.booking.datetime.today}, ${datePart}`;
+    if (isTomorrow(date)) return `${t.booking.datetime.tomorrow}, ${datePart}`;
+    return format(date, locale === "es" ? "EEE, d MMM" : "EEE, MMM d", { locale: dateLocale });
   };
 
   const formatTimeDisplay = (time: string): string => {
     const [hours, minutes] = time.split(":").map(Number);
+    if (locale === "es") {
+      return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+    }
     const period = hours >= 12 ? "PM" : "AM";
     const displayHours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
     return `${displayHours}:${minutes.toString().padStart(2, "0")} ${period}`;
@@ -89,14 +94,12 @@ const DateTimeSelection = ({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-display text-2xl text-ink mb-2">Select Date & Time</h2>
-        <p className="text-ink/70 text-sm">
-          Choose your preferred appointment slot. Bookings require at least 12 hours advance notice.
-        </p>
+        <h2 className="font-display text-2xl text-ink mb-2">{t.booking.datetime.title}</h2>
+        <p className="text-ink/70 text-sm">{t.booking.datetime.subtitle}</p>
       </div>
 
       <div>
-        <h3 className="font-display text-lg text-ink mb-3">Available Dates</h3>
+        <h3 className="font-display text-lg text-ink mb-3">{t.booking.datetime.availableDates}</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
           {availableDates.slice(0, 14).map((date, index) => {
             const dateStr = format(date, "yyyy-MM-dd");
@@ -115,7 +118,7 @@ const DateTimeSelection = ({
                 }`}
               >
                 {formatDateDisplay(date)}
-                {isClosed && <span className="block text-[10px] mt-0.5">Closed</span>}
+                {isClosed && <span className="block text-[10px] mt-0.5">{t.booking.datetime.closed}</span>}
               </button>
             );
           })}
@@ -126,13 +129,13 @@ const DateTimeSelection = ({
         <div>
           <h3 className="font-display text-lg text-ink mb-3 flex items-center gap-2">
             <Clock className="w-5 h-5" />
-            Available Times
+            {t.booking.datetime.availableTimes}
           </h3>
 
           {timeSlots.length === 0 ? (
             <div className="p-6 bg-muted border text-center text-ink/70">
-              <p>No available time slots for this date.</p>
-              <p className="text-sm mt-1">Please select another date or contact us directly.</p>
+              <p>{t.booking.datetime.noSlots}</p>
+              <p className="text-sm mt-1">{t.booking.datetime.noSlotsHint}</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
@@ -151,7 +154,9 @@ const DateTimeSelection = ({
                 >
                   {formatTimeDisplay(slot.startTime)}
                   {durationMinutes > 60 ? (
-                    <span className="block text-[10px] mt-0.5 opacity-90">to {formatTimeDisplay(slot.endTime)}</span>
+                    <span className="block text-[10px] mt-0.5 opacity-90">
+                      {t.booking.datetime.to} {formatTimeDisplay(slot.endTime)}
+                    </span>
                   ) : null}
                 </button>
               ))}

@@ -5,9 +5,11 @@ import TreatmentBlock from "@/components/TreatmentBlock";
 import Gallery from "@/components/Gallery";
 import PricesSection from "@/components/PricesSection";
 import LocationSection from "@/components/LocationSection";
-import { treatments } from "@/data/treatments";
+import { useTreatments } from "@/data/treatments";
 
 const Index = () => {
+  const treatments = useTreatments();
+
   return (
     <div className="min-h-screen bg-background">
       <Header />

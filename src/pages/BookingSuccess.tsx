@@ -9,9 +9,10 @@ import {
 } from "@/lib/stripe-checkout";
 import { getTreatment } from "@/data/treatments";
 import type { BookingData } from "@/types/booking";
+import { useTranslation } from "@/i18n/LocaleProvider";
 
-function bookingDataFromStored(b: StoredBooking): BookingData | null {
-  const treatment = getTreatment(b.treatment_slug);
+function bookingDataFromStored(b: StoredBooking, locale: "en" | "es"): BookingData | null {
+  const treatment = getTreatment(b.treatment_slug, locale);
   if (!treatment) return null;
 
   const servicePriceCents =
@@ -44,6 +45,8 @@ function bookingDataFromStored(b: StoredBooking): BookingData | null {
 const BookingSuccess = () => {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get("session_id");
+  const { t, locale } = useTranslation();
+  const s = t.booking.success;
 
   const [status, setStatus] = useState<"loading" | "paid" | "unpaid" | "error">("loading");
   const [message, setMessage] = useState<string>("");
@@ -55,7 +58,7 @@ const BookingSuccess = () => {
   useEffect(() => {
     if (!sessionId) {
       setStatus("error");
-      setMessage("Missing payment session. Return to booking to try again.");
+      setMessage(s.missingSession);
       return;
     }
 
@@ -71,19 +74,15 @@ const BookingSuccess = () => {
         if (!session.paid || !session.booking) {
           setStatus("unpaid");
           setMessage(
-            session.payment_status === "unpaid"
-              ? "Payment was not completed. You can return to booking and try again."
-              : "This session is not paid yet. If you just paid, wait a moment and refresh.",
+            session.payment_status === "unpaid" ? s.unpaidMessage : s.pendingMessage,
           );
           return;
         }
 
-        const data = bookingDataFromStored(session.booking);
+        const data = bookingDataFromStored(session.booking, locale);
         if (!data) {
           setStatus("error");
-          setMessage(
-            "Payment succeeded but the treatment could not be matched to a known service. Please contact us with your receipt.",
-          );
+          setMessage(s.treatmentMismatch);
           return;
         }
 
@@ -95,27 +94,26 @@ const BookingSuccess = () => {
       } catch (e) {
         if (cancelled) return;
         setStatus("error");
-        setMessage(e instanceof Error ? e.message : "Something went wrong.");
+        setMessage(e instanceof Error ? e.message : s.genericError);
       }
     })();
 
     return () => {
       cancelled = true;
     };
-  }, [sessionId]);
+  }, [sessionId, locale, s]);
 
-  // Stripe sometimes attaches receipt_url shortly after settlement; retry once if missing.
   useEffect(() => {
     if (status !== "paid" || !sessionId || receiptUrl) return;
-    const t = setTimeout(async () => {
+    const timer = setTimeout(async () => {
       try {
         const session = await fetchCheckoutSessionStatus(sessionId);
         if (session.booking?.receipt_url) setReceiptUrl(session.booking.receipt_url);
       } catch {
-        /* ignore: user already sees confirmation */
+        /* ignore */
       }
     }, 2200);
-    return () => clearTimeout(t);
+    return () => clearTimeout(timer);
   }, [status, sessionId, receiptUrl]);
 
   return (
@@ -125,32 +123,32 @@ const BookingSuccess = () => {
         {status === "loading" && (
           <div className="flex flex-col items-center justify-center min-h-[320px] gap-3 text-ink/80">
             <div className="w-8 h-8 border-2 border-ink/30 border-t-ink rounded-full animate-spin" />
-            <p>Confirming your payment…</p>
+            <p>{s.confirming}</p>
           </div>
         )}
 
         {status === "error" && (
           <div className="max-w-md mx-auto text-center space-y-4">
-            <h1 className="font-display text-2xl text-ink">Something went wrong</h1>
+            <h1 className="font-display text-2xl text-ink">{s.errorTitle}</h1>
             <p className="text-ink/80 text-sm">{message}</p>
             <Link
               to="/booking"
               className="inline-block bg-peach hover:bg-[hsl(var(--peach-hover))] text-ink font-display tracking-widest px-8 py-3"
             >
-              Back to booking
+              {s.backToBooking}
             </Link>
           </div>
         )}
 
         {status === "unpaid" && (
           <div className="max-w-md mx-auto text-center space-y-4">
-            <h1 className="font-display text-2xl text-ink">Payment not completed</h1>
+            <h1 className="font-display text-2xl text-ink">{s.unpaidTitle}</h1>
             <p className="text-ink/80 text-sm">{message}</p>
             <Link
               to="/booking"
               className="inline-block bg-peach hover:bg-[hsl(var(--peach-hover))] text-ink font-display tracking-widest px-8 py-3"
             >
-              Return to booking
+              {s.returnToBooking}
             </Link>
           </div>
         )}

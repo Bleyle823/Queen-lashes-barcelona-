@@ -15,6 +15,8 @@ import { getTreatment } from "@/data/treatments";
 import { parseTreatmentPrice, BOOKING_DEPOSIT_CENTS } from "@/utils/booking";
 import { fetchPublicAvailability, type PublicAvailability } from "@/lib/stripe-checkout";
 import { addDays, format } from "date-fns";
+import { useTranslation } from "@/i18n/LocaleProvider";
+import { interpolate } from "@/i18n/translations";
 
 const WIZARD_STEPS = [
   BookingStep.TREATMENT,
@@ -26,6 +28,7 @@ const WIZARD_STEPS = [
 
 const BookingFlow = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { t, locale } = useTranslation();
   const [currentStep, setCurrentStep] = useState<BookingStep>(BookingStep.TREATMENT);
   const [selectedTreatment, setSelectedTreatment] = useState<Treatment | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<TreatmentVariant | null>(null);
@@ -39,9 +42,22 @@ const BookingFlow = () => {
   });
 
   useEffect(() => {
+    if (selectedTreatment) {
+      const updated = getTreatment(selectedTreatment.slug, locale);
+      if (updated) {
+        setSelectedTreatment(updated);
+        if (selectedVariant) {
+          const updatedVariant = updated.bookingVariants?.find((v) => v.id === selectedVariant.id);
+          if (updatedVariant) setSelectedVariant(updatedVariant);
+        }
+      }
+    }
+  }, [locale]);
+
+  useEffect(() => {
     const treatmentSlug = searchParams.get("treatment");
     if (treatmentSlug) {
-      const treatment = getTreatment(treatmentSlug);
+      const treatment = getTreatment(treatmentSlug, locale);
       if (treatment) {
         setSelectedTreatment(treatment);
         setSelectedVariant(null);
@@ -50,7 +66,7 @@ const BookingFlow = () => {
         }
       }
     }
-  }, [searchParams]);
+  }, [searchParams, locale]);
 
   useEffect(() => {
     setSelectedSlot(null);
@@ -58,11 +74,11 @@ const BookingFlow = () => {
 
   useEffect(() => {
     if (searchParams.get("checkout") !== "cancelled") return;
-    toast.info("Checkout was cancelled. You can try again when you're ready.");
+    toast.info(t.booking.checkoutCancelled);
     const next = new URLSearchParams(searchParams);
     next.delete("checkout");
     setSearchParams(next, { replace: true });
-  }, [searchParams, setSearchParams]);
+  }, [searchParams, setSearchParams, t.booking.checkoutCancelled]);
 
   const [availability, setAvailability] = useState<PublicAvailability>({
     blocked: [],
@@ -130,12 +146,12 @@ const BookingFlow = () => {
   }, [selectedTreatment, selectedSlot, selectedVariant, bookingDetails]);
 
   const stepTitles: Record<BookingStep, string> = {
-    [BookingStep.TREATMENT]: "Select Treatment",
-    [BookingStep.DATETIME]: "Choose Date & Time",
-    [BookingStep.DETAILS]: "Your Details",
-    [BookingStep.SUMMARY]: "Review Booking",
-    [BookingStep.PAYMENT]: "Payment",
-    [BookingStep.CONFIRMATION]: "Confirmed",
+    [BookingStep.TREATMENT]: t.booking.steps.treatment,
+    [BookingStep.DATETIME]: t.booking.steps.datetime,
+    [BookingStep.DETAILS]: t.booking.steps.details,
+    [BookingStep.SUMMARY]: t.booking.steps.summary,
+    [BookingStep.PAYMENT]: t.booking.steps.payment,
+    [BookingStep.CONFIRMATION]: t.booking.steps.confirmed,
   };
 
   const currentStepIndex = WIZARD_STEPS.indexOf(currentStep);
@@ -180,7 +196,10 @@ const BookingFlow = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between text-sm text-ink/60 mb-2">
             <span>
-              Step {currentStepIndex + 1} of {WIZARD_STEPS.length}
+              {interpolate(t.booking.stepOf, {
+                current: currentStepIndex + 1,
+                total: WIZARD_STEPS.length,
+              })}
             </span>
             <span>{stepTitles[currentStep]}</span>
           </div>
@@ -197,8 +216,8 @@ const BookingFlow = () => {
             <TreatmentSelection
               selectedTreatment={selectedTreatment}
               selectedVariant={selectedVariant}
-              onSelectTreatment={(t) => {
-                setSelectedTreatment(t);
+              onSelectTreatment={(tr) => {
+                setSelectedTreatment(tr);
                 setSelectedVariant(null);
               }}
               onSelectVariant={setSelectedVariant}
@@ -238,7 +257,7 @@ const BookingFlow = () => {
               className="flex items-center gap-2 px-6 py-3 border border-ink/30 text-ink hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
-              Back
+              {t.booking.back}
             </button>
 
             <button
@@ -247,7 +266,7 @@ const BookingFlow = () => {
               disabled={!canProceed}
               className="flex items-center gap-2 bg-peach hover:bg-[hsl(var(--peach-hover))] text-ink font-display tracking-widest px-8 py-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {currentStep === BookingStep.SUMMARY ? "Proceed to Payment" : "Continue"}
+              {currentStep === BookingStep.SUMMARY ? t.booking.proceedToPayment : t.booking.continue}
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>

@@ -1,5 +1,6 @@
 import type { Treatment, TreatmentVariant } from "@/data/treatments";
-import { treatments } from "@/data/treatments";
+import { useTreatments } from "@/data/treatments";
+import { useTranslation } from "@/i18n/LocaleProvider";
 
 interface Props {
   selectedTreatment: Treatment | null;
@@ -14,13 +15,15 @@ const TreatmentSelection = ({
   onSelectTreatment,
   onSelectVariant,
 }: Props) => {
+  const treatments = useTreatments();
+  const { t } = useTranslation();
   const variants = selectedTreatment?.bookingVariants;
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-display text-2xl text-ink mb-2">Select Treatment</h2>
-        <p className="text-ink/70 text-sm">Choose the service you&apos;d like to book.</p>
+        <h2 className="font-display text-2xl text-ink mb-2">{t.booking.treatment.title}</h2>
+        <p className="text-ink/70 text-sm">{t.booking.treatment.subtitle}</p>
       </div>
 
       <div className="grid gap-4">
@@ -47,7 +50,7 @@ const TreatmentSelection = ({
                   <p className="font-display text-sm text-ink mt-2">{treatment.price}</p>
                 )}
                 {treatment.bookingVariants?.length ? (
-                  <p className="text-ink/60 text-xs mt-2">Choose a specific style in the next step.</p>
+                  <p className="text-ink/60 text-xs mt-2">{t.booking.treatment.chooseStyleNext}</p>
                 ) : null}
               </div>
               <div
@@ -67,11 +70,11 @@ const TreatmentSelection = ({
       {selectedTreatment && variants && variants.length > 0 && (
         <div className="space-y-3 pt-2 border-t border-border">
           <div>
-            <h3 className="font-display text-lg text-ink">Choose your style</h3>
+            <h3 className="font-display text-lg text-ink">{t.booking.treatment.chooseStyle}</h3>
             <p className="text-ink/70 text-sm mt-1">
               {selectedTreatment.slug === "signature-lash-extensions"
-                ? "Pick the lash style that matches your look (pricing is for a new set)."
-                : "Pick Korean or Keratin lash lift for your Signature Lashes appointment."}
+                ? t.booking.treatment.lashStyleHint
+                : t.booking.treatment.liftStyleHint}
             </p>
           </div>
           <div className="grid gap-2 sm:grid-cols-2">

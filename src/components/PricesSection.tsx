@@ -1,10 +1,14 @@
 import { motion } from "framer-motion";
 import FadeInWhenVisible from "@/components/animations/FadeInWhenVisible";
 import StaggerChildren from "@/components/animations/StaggerChildren";
-import { priceGroups, lashLiftPriceGroups } from "@/data/treatments";
+import { usePriceGroups } from "@/data/treatments";
+import { useTranslation } from "@/i18n/LocaleProvider";
 
 const PricesSection = () => {
+  const { t } = useTranslation();
+  const { priceGroups, lashLiftPriceGroups } = usePriceGroups();
   const allGroups = [...priceGroups, ...lashLiftPriceGroups];
+
   return (
     <section className="py-16 lg:py-24">
       <motion.h2
@@ -14,7 +18,7 @@ const PricesSection = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
-        PRICES
+        {t.prices.title}
       </motion.h2>
 
       <FadeInWhenVisible>
@@ -32,13 +36,13 @@ const PricesSection = () => {
                   {g.name.toUpperCase()}
                 </h3>
                 <ul className="space-y-1 text-sm uppercase tracking-wide text-ink/85">
-                  {g.tiers.map((t) => (
+                  {g.tiers.map((tier) => (
                     <li
-                      key={t.label}
+                      key={tier.label}
                       className="flex justify-between gap-4 hover:text-ink transition-colors"
                     >
-                      <span>{t.label}</span>
-                      <span className="font-semibold shrink-0">{t.price}</span>
+                      <span>{tier.label}</span>
+                      <span className="font-semibold shrink-0">{tier.price}</span>
                     </li>
                   ))}
                 </ul>

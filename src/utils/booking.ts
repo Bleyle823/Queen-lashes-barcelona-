@@ -1,6 +1,8 @@
 import { format, addDays, isWeekend, isBefore, startOfDay, addMinutes, parseISO } from "date-fns";
+import { enUS, es as esLocale } from "date-fns/locale";
 import type { BookingData, BookingSlot } from "@/types/booking";
-
+import type { Locale } from "@/i18n/types";
+import { translations } from "@/i18n/translations";
 // Business hours: Mon-Fri 9:00-18:00, Sat-Sun by request only
 const BUSINESS_HOURS = {
   weekday: { start: 9, end: 18 },
@@ -116,20 +118,24 @@ export function parseTreatmentPrice(priceStr: string): number {
   return 0;
 }
 
-export function formatBookingDateTime(date: string, startTime: string): string {
+export function formatBookingDateTime(date: string, startTime: string, locale: Locale = "en"): string {
   const dateTime = parseISO(`${date}T${startTime}`);
-  return format(dateTime, "EEEE, MMMM do, yyyy 'at' h:mm a");
+  const dateLocale = locale === "es" ? esLocale : enUS;
+  const pattern =
+    locale === "es" ? "EEEE, d 'de' MMMM 'de' yyyy 'a las' HH:mm" : "EEEE, MMMM do, yyyy 'at' h:mm a";
+  return format(dateTime, pattern, { locale: dateLocale });
 }
 
 /** Human-readable appointment length for UI copy. */
-export function formatAppointmentDuration(minutes: number): string {
-  if (minutes === 60) return "1 hour";
-  if (minutes === 120) return "2 hours";
+export function formatAppointmentDuration(minutes: number, locale: Locale = "en"): string {
+  const d = translations[locale].booking.duration;
+  if (minutes === 60) return d.oneHour;
+  if (minutes === 120) return d.twoHours;
   if (minutes > 0 && minutes % 60 === 0) {
     const h = minutes / 60;
-    return `${h} hours`;
+    return d.hours.replace("{{count}}", String(h));
   }
-  return `${minutes} minutes`;
+  return d.minutes.replace("{{count}}", String(minutes));
 }
 
 export function getBookingServiceLabel(data: Pick<BookingData, "treatment" | "selectedVariant" | "serviceLabel">): string {

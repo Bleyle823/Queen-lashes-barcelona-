@@ -5,17 +5,20 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import FadeInWhenVisible from "@/components/animations/FadeInWhenVisible";
 import StaggerChildren from "@/components/animations/StaggerChildren";
-import { getTreatment, priceGroups, lashLiftPriceGroups } from "@/data/treatments";
+import { useTreatment, usePriceGroups } from "@/data/treatments";
+import { useTranslation } from "@/i18n/LocaleProvider";
 
 const TreatmentDetail = () => {
   const { slug } = useParams();
-  const treatment = slug ? getTreatment(slug) : undefined;
+  const treatment = useTreatment(slug ?? "");
+  const { lashExtensionPriceGroups, lashLiftPriceGroups } = usePriceGroups();
+  const { t } = useTranslation();
 
-  if (!treatment) return <Navigate to="/treatments" replace />;
+  if (!slug || !treatment) return <Navigate to="/treatments" replace />;
 
   const detailPriceGroups =
     treatment.slug === "signature-lash-extensions"
-      ? priceGroups
+      ? lashExtensionPriceGroups
       : treatment.slug === "korean-lash-lift"
         ? lashLiftPriceGroups
         : [];
@@ -26,19 +29,21 @@ const TreatmentDetail = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main className="max-w-7xl mx-auto px-6 lg:px-10 py-16">
-        <Link to="/treatments" className="text-sm uppercase tracking-widest text-ink/70 hover:text-ink transition-colors">← All treatments</Link>
+        <Link to="/treatments" className="text-sm uppercase tracking-widest text-ink/70 hover:text-ink transition-colors">
+          {t.treatmentDetail.backLink}
+        </Link>
 
         <FadeInWhenVisible>
           <div className="mt-8 grid md:grid-cols-2 gap-12 items-start">
-            <motion.img 
-              src={treatment.detailImage ?? treatment.image} 
-              alt={treatment.name} 
+            <motion.img
+              src={treatment.detailImage ?? treatment.image}
+              alt={treatment.name}
               className="w-full aspect-square object-cover"
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             />
             <div className="space-y-5">
-              <motion.h1 
+              <motion.h1
                 className="font-display text-4xl md:text-5xl text-ink"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -46,8 +51,8 @@ const TreatmentDetail = () => {
               >
                 {treatment.name.toUpperCase()}
               </motion.h1>
-              
-              <motion.p 
+
+              <motion.p
                 className="font-script text-3xl text-ink/80"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -55,37 +60,35 @@ const TreatmentDetail = () => {
               >
                 {treatment.tagline}
               </motion.p>
-              
+
               {inlinePrice && (
-                <motion.div 
+                <motion.div
                   className="pt-2"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
                 >
-                  <h2 className="font-display text-2xl text-ink">PRICE</h2>
+                  <h2 className="font-display text-2xl text-ink">{t.treatmentDetail.price}</h2>
                   <p className="font-display text-xl text-ink mt-1">{inlinePrice}</p>
                 </motion.div>
               )}
-              
+
               <StaggerChildren staggerDelay={0.1}>
                 {treatment.description.map((p, i) => (
-                  <p key={i} className="text-ink/85 uppercase text-sm tracking-wide leading-relaxed">{p}</p>
+                  <p key={i} className="text-ink/85 uppercase text-sm tracking-wide leading-relaxed">
+                    {p}
+                  </p>
                 ))}
               </StaggerChildren>
-              
+
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
               >
-                <Button
-                  asChild
-                  size="lg"
-                  className="shadow-lg"
-                >
+                <Button asChild size="lg" className="shadow-lg">
                   <Link to={`/booking?treatment=${encodeURIComponent(treatment.slug)}`}>
-                    BOOK THIS TREATMENT
+                    {t.treatmentDetail.bookCta}
                   </Link>
                 </Button>
               </motion.div>
@@ -95,8 +98,8 @@ const TreatmentDetail = () => {
 
         {treatment.exploreLook && treatment.exploreLook.length > 0 && (
           <FadeInWhenVisible delay={0.3}>
-            <section className="mt-20" aria-label="Explore your look">
-              <h2 className="font-display text-4xl md:text-5xl text-ink mb-8">EXPLORE YOUR LOOK</h2>
+            <section className="mt-20" aria-label={t.treatmentDetail.exploreLookAria}>
+              <h2 className="font-display text-4xl md:text-5xl text-ink mb-8">{t.treatmentDetail.exploreLook}</h2>
               <StaggerChildren className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
                 {treatment.exploreLook.map((item, i) => (
                   <motion.img
@@ -116,16 +119,16 @@ const TreatmentDetail = () => {
         {showPrices && (
           <FadeInWhenVisible delay={0.5}>
             <section className="mt-20">
-              <h2 className="font-display text-4xl md:text-5xl text-ink mb-8">PRICES</h2>
+              <h2 className="font-display text-4xl md:text-5xl text-ink mb-8">{t.treatmentDetail.prices}</h2>
               <StaggerChildren className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {detailPriceGroups.map((g) => (
                   <div key={g.name} className="bg-muted p-6 hover:shadow-lg transition-shadow">
                     <h3 className="font-display text-lg text-ink mb-3">{g.name.toUpperCase()}</h3>
                     <ul className="space-y-1 text-sm uppercase tracking-wide text-ink/85">
-                      {g.tiers.map((t) => (
-                        <li key={t.label} className="flex justify-between">
-                          <span>{t.label}</span>
-                          <span className="font-semibold">{t.price}</span>
+                      {g.tiers.map((tier) => (
+                        <li key={tier.label} className="flex justify-between">
+                          <span>{tier.label}</span>
+                          <span className="font-semibold">{tier.price}</span>
                         </li>
                       ))}
                     </ul>
