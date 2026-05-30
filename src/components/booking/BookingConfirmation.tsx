@@ -50,7 +50,7 @@ const BookingConfirmation = ({
         </div>
 
         <div className="flex items-start gap-3">
-          <img src={treatment.image} alt={treatment.name} className="w-12 h-12 object-cover flex-shrink-0" />
+          <img src={treatment.bookingImage ?? treatment.image} alt={treatment.name} className="w-12 h-12 object-cover flex-shrink-0" />
           <div className="flex-1 min-w-0">
             <h3 className="font-medium text-ink text-sm">{serviceTitle}</h3>
             <p className="text-ink/70 text-xs">{treatment.tagline}</p>

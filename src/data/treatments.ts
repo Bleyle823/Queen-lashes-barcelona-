@@ -4,7 +4,6 @@ import browLiftImg from "@/assets/brow-lift.png";
 import signatureBrowsListingImg from "@/assets/signature-brows-listing.jpg";
 import signatureLashExtensionsDetailImg from "@/assets/signature-lash-extensions-detail.png";
 import signatureLashExtensionsListingImg from "@/assets/signature-lash-extensions-listing.png";
-import bookingSignatureLashExtensionsImg from "@/assets/booking/signature-lash-extensions.png";
 import bookingBrowLiftImg from "@/assets/booking/brow-lift.jpg";
 import bookingKoreanLashLiftImg from "@/assets/booking/korean-lash-lift.jpg";
 import exploreKoreanLashLift from "@/assets/explore-korean-lash-lift.png";
@@ -84,7 +83,7 @@ export const treatments: Treatment[] = [
     image: signatureLashExtensionsDetailImg,
     listingsImage: signatureLashExtensionsListingImg,
     detailImage: signatureLashExtensionsDetailImg,
-    bookingImage: bookingSignatureLashExtensionsImg,
+    bookingImage: signatureLashExtensionsListingImg,
     cta: "Explore Your Look",
     bookingDurationMinutes: 120,
     exploreLook: signatureLashExtensionsExploreLook,

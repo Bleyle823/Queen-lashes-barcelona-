@@ -30,7 +30,7 @@ const BookingSummary = ({ bookingData }: Props) => {
       <div className="bg-muted border p-6 space-y-4">
         {/* Treatment */}
         <div className="flex items-start gap-3">
-          <img src={treatment.image} alt={treatment.name} className="w-16 h-16 object-cover flex-shrink-0" />
+          <img src={treatment.bookingImage ?? treatment.image} alt={treatment.name} className="w-16 h-16 object-cover flex-shrink-0" />
           <div className="flex-1 min-w-0">
             <h3 className="font-display text-lg text-ink">{serviceTitle}</h3>
             <p className="text-ink/80 text-sm font-script text-base">{treatment.tagline}</p>
