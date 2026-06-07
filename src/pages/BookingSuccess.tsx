@@ -10,8 +10,9 @@ import {
 import { getTreatment } from "@/data/treatments";
 import type { BookingData } from "@/types/booking";
 import { useTranslation } from "@/i18n/LocaleProvider";
+import type { Locale } from "@/i18n/types";
 
-function bookingDataFromStored(b: StoredBooking, locale: "en" | "es"): BookingData | null {
+function bookingDataFromStored(b: StoredBooking, locale: Locale): BookingData | null {
   const treatment = getTreatment(b.treatment_slug, locale);
   if (!treatment) return null;
 

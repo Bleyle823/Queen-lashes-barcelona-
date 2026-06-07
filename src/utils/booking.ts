@@ -1,8 +1,8 @@
 import { format, addDays, isWeekend, isBefore, startOfDay, addMinutes, parseISO } from "date-fns";
-import { enUS, es as esLocale } from "date-fns/locale";
 import type { BookingData, BookingSlot } from "@/types/booking";
 import type { Locale } from "@/i18n/types";
 import { translations } from "@/i18n/translations";
+import { getDateFnsLocale } from "@/i18n/dateLocale";
 // Business hours: Mon-Fri 9:00-18:00, Sat-Sun by request only
 const BUSINESS_HOURS = {
   weekday: { start: 9, end: 18 },
@@ -120,9 +120,13 @@ export function parseTreatmentPrice(priceStr: string): number {
 
 export function formatBookingDateTime(date: string, startTime: string, locale: Locale = "en"): string {
   const dateTime = parseISO(`${date}T${startTime}`);
-  const dateLocale = locale === "es" ? esLocale : enUS;
+  const dateLocale = getDateFnsLocale(locale);
   const pattern =
-    locale === "es" ? "EEEE, d 'de' MMMM 'de' yyyy 'a las' HH:mm" : "EEEE, MMMM do, yyyy 'at' h:mm a";
+    locale === "es"
+      ? "EEEE, d 'de' MMMM 'de' yyyy 'a las' HH:mm"
+      : locale === "de"
+        ? "EEEE, d. MMMM yyyy 'um' HH:mm"
+        : "EEEE, MMMM do, yyyy 'at' h:mm a";
   return format(dateTime, pattern, { locale: dateLocale });
 }
 

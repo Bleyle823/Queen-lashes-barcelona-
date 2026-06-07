@@ -1,10 +1,10 @@
 import { useState, useMemo } from "react";
 import { format, isToday, isTomorrow } from "date-fns";
-import { enUS, es as esLocale } from "date-fns/locale";
 import { Clock } from "lucide-react";
 import type { BookingSlot } from "@/types/booking";
 import { generateTimeSlots, getAvailableDates } from "@/utils/booking";
 import { useTranslation } from "@/i18n/LocaleProvider";
+import { formatDatePart } from "@/i18n/dateLocale";
 
 type AvailabilityEntry = {
   date: string;
@@ -32,7 +32,6 @@ const DateTimeSelection = ({
 }: Props) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const { t, locale } = useTranslation();
-  const dateLocale = locale === "es" ? esLocale : enUS;
   const availableDates = useMemo(() => getAvailableDates(), []);
 
   const blockedWholeDays = useMemo(
@@ -75,15 +74,15 @@ const DateTimeSelection = ({
   }, [selectedDate, existingBookings, extra, blockedSlotKeys, blockedWholeDays, durationMinutes]);
 
   const formatDateDisplay = (date: Date): string => {
-    const datePart = format(date, locale === "es" ? "d MMM" : "MMM d", { locale: dateLocale });
+    const datePart = formatDatePart(date, locale, "short");
     if (isToday(date)) return `${t.booking.datetime.today}, ${datePart}`;
     if (isTomorrow(date)) return `${t.booking.datetime.tomorrow}, ${datePart}`;
-    return format(date, locale === "es" ? "EEE, d MMM" : "EEE, MMM d", { locale: dateLocale });
+    return formatDatePart(date, locale, "weekday");
   };
 
   const formatTimeDisplay = (time: string): string => {
     const [hours, minutes] = time.split(":").map(Number);
-    if (locale === "es") {
+    if (locale === "es" || locale === "de") {
       return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
     }
     const period = hours >= 12 ? "PM" : "AM";

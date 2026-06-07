@@ -234,7 +234,7 @@ export const es: Translation = {
       tagline: "Un toque sutil que marca la diferencia.",
       description: [
         "Hay algo especial en sentirse impecable sin esforzarse demasiado.",
-        "Las extensiones realzan suavemente tu belleza natural, creando un look delicado y más lleno que se siente tan ligero como se ve. Sin rímel, sin rutina, solo confianza silenciosa de la mañana a la noche.",
+        "Las extensiones realzan suavemente tu belleza natural, creando un look delicado y más voluminoso que se siente tan ligero como se ve. Sin rímel, sin rutina, solo seguridad discreta de la mañana a la noche.",
         "Un toque sutil que marca la diferencia.",
       ],
       cta: "Explora tu look",
@@ -255,7 +255,7 @@ export const es: Translation = {
       tagline: "Una transformación sutil, hecha para ti.",
       price: "Lifting de cejas 55€",
       description: [
-        "Hay una confianza silenciosa en unas cejas bellamente peinadas, suaves, elevadas y naturalmente llenas.",
+        "Hay una confianza genuina en unas cejas impecablemente peinadas, suaves, elevadas y naturalmente pobladas.",
         "Nuestro Signature Brow Lift realza lo que ya es tuyo, creando un acabado suave y peinado hacia arriba que se siente ligero, sin esfuerzo y perfectamente adaptado a ti.",
         "Sin peinado diario, sin líneas duras, solo belleza naturalmente elevada.",
         "Una transformación sutil, hecha para ti.",
@@ -266,7 +266,7 @@ export const es: Translation = {
       name: "Pestañas Signature",
       tagline: "Pestañas elevadas, en todo su esplendor.",
       description: [
-        "Si tus pestañas se sienten rectas, pierden forma rápido o dependen del rímel para definirse, el resultado suele sentirse temporal en lugar de refinado.",
+        "Si tus pestañas se sienten rectas, pierden forma rápido o dependen de la máscara para definirse, el resultado suele sentirse temporal en lugar de refinado.",
         "Nuestro Signature Lash Lift ofrece un enfoque a medida. Eleva tus pestañas naturales con precisión para crear una curva suave y duradera que realza tu mirada sin exceso ni esfuerzo.",
         "El resultado es un look pulido y ligero que te acompaña de la mañana a la noche.",
         "Pestañas elevadas, en todo su esplendor.",
